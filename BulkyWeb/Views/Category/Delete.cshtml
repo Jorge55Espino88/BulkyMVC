@@ -1,6 +1,16 @@
-﻿@model Category
+﻿@model BulkyWeb.Models.Category
 
-<form method="post">
+<div class="card shadow border-0 mt-4">
+    <div class="card-header bg-secondary bg-gradient mt-0 py-3">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h2 class="text-white py-2">Create Category</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body p-4">
+        <form method="post">
     <input type="hidden" asp-for="Id"/>
     <div class="border p-3 mt-4">
         <div class="row pb-2">
@@ -33,3 +43,6 @@
         </div>
     </div>
 </form>
+    </div>
+</div>
+
