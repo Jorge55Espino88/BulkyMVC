@@ -44,12 +44,13 @@ namespace BulkyWeb.Controllers
             if (id == null || id == 0)
                 return NotFound();
 
-            Category categoryFromDb = _db.Categories.Find(id);
+            Category? category = _db.Categories.Find(id);
+            //Category? categoryFromDb = _db.Categories.Where(y => y.Id == id).FirstOrDefault();
 
-            if (categoryFromDb == null)
+            if (category == null)
                 return NotFound();
 
-            return View(categoryFromDb);
+            return View(category);
         }
 
         [HttpPost]
