@@ -23,7 +23,7 @@ namespace Bulky.Models.Models
         public double ListPrice { get; set; }
 
         [Required]
-        [DisplayName("Price or 1-50")]
+        [DisplayName("Price for 1-50")]
         [Range(1, 1000)]
         public double Price { get; set; }
 
@@ -41,7 +41,8 @@ namespace Bulky.Models.Models
         [ForeignKey("CategoryId")]
         [ValidateNever]
         public Category Category { get; set; }
+        
         [ValidateNever]
-        public string ImageUrl { get; set; }
+        public string? ImageUrl { get; set; }
     }
 }

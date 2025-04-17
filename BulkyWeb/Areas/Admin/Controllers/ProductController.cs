@@ -25,7 +25,7 @@ namespace BulkyWeb.Areas.Admin.Controllers
         }
 
         //-------------------------------------------------------------------------------------
-        public IActionResult Create()
+        public IActionResult Upsert(int? id)
         {
             ProductVM productVM = new()
             {
@@ -36,49 +36,39 @@ namespace BulkyWeb.Areas.Admin.Controllers
                 }),
                 Product = new Product()
             };
-            return View(productVM);
+
+            if(id == null || id == 0) //create
+                return View(productVM);
+            else
+            {
+                //update
+                productVM.Product = _unitOfWork.Product.Get(u => u.Id == id);
+                return View(productVM);
+            }
+
         }
 
         [HttpPost]
-        public IActionResult Create(ProductVM product)
+        public IActionResult Upsert(ProductVM productVM, IFormFile? file)
         {
             if (ModelState.IsValid)
             {
-                _unitOfWork.Product.Add(product.Product);
+                _unitOfWork.Product.Add(productVM.Product);
                 _unitOfWork.Save();
                 TempData["success"] = "Product created succesfully";
                 return RedirectToAction("Index","Product");
             }
-            return View();
-        }
-
-
-        //--------------------------------------------------------------------------------------
-        public IActionResult Edit(int id)
-        {
-            if(id == null || id == 0)
-                return NotFound();
-
-            Product? product = _unitOfWork.Product.Get(u  => u.Id == id);
-
-            if (product == null)
-                return NotFound();
-
-            return View(product);
-        }
-
-        [HttpPost]
-        public IActionResult Edit(Product product)
-        {
-            if (ModelState.IsValid)
+            else
             {
-                _unitOfWork.Product.Update(product);
-                _unitOfWork.Save();
-                TempData["success"] = "Product updated succesfully";
-                return RedirectToAction("Index", "Product");
+                productVM.CategoryList = _unitOfWork.Category.GetAll().Select(u => new SelectListItem
+                {
+                    Text = u.Name,
+                    Value = u.Id.ToString()
+                });
+                return View(productVM);
             }
-            return View();
         }
+
 
 
         //--------------------------------------------------------------------------------------
